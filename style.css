@@ -17,14 +17,21 @@ body {
 
 #background{
     position:fixed;
-    left:0;
-    top:0;
-    width:100%;
-    height:100%;
+    inset:0;
+
+    width:100vw;
+    height:100vh;
+    height:100dvh;
+
     background-image:url("assets/bg/bg1.jpg");
     background-size:cover;
     background-position:center;
     background-repeat:no-repeat;
+
+    transform:translateZ(0);
+    backface-visibility:hidden;
+    will-change:transform;
+
     z-index:-1;
 }
 
@@ -824,24 +831,30 @@ height:100px;
 }
 
 #object1{
-
     display:none;
 
-    position:absolute;
+    position:fixed;
 
     left:50%;
-    top:50%;
+    top:42%;
 
     transform:translate(-50%,-50%);
 
-    width:420px;
+    width:min(420px,72vw);
+    height:auto;
 
-    max-height:90vh;
+    max-width:72vw;
+    max-height:56vh;
+    max-height:56dvh;
 
     object-fit:contain;
 
-    z-index:50;
+    pointer-events:none;
 
+    z-index:200;
+
+    will-change:opacity;
+    backface-visibility:hidden;
 }
 
 #hotspot2 {
@@ -1483,10 +1496,10 @@ font-size:32px;
 @media (max-width: 768px) {
 html,
 body {
-    width: 100%;
-    min-height: 100%;
-    overflow-x: hidden;
-    overflow-y: auto;
+    width:100%;
+    height:100%;
+    min-height:100%;
+    overflow:hidden;
 }
 
     #title {
@@ -2038,5 +2051,53 @@ body.ready {
     }
 
 }
+
+/* =========================
+   スマホ版 object1・背景安定化
+========================= */
+
+@media (max-width: 768px){
+
+    #background{
+        width:100vw;
+        height:100vh;
+        height:100dvh;
+        background-attachment:scroll;
+    }
+
+    #object1{
+        position:fixed;
+
+        left:50%;
+        top:39%;
+
+        width:min(320px,68vw);
+        max-width:68vw;
+
+        max-height:48vh;
+        max-height:48dvh;
+
+        transform:translate3d(-50%,-50%,0);
+
+        object-fit:contain;
+
+        backface-visibility:hidden;
+        will-change:opacity;
+    }
+
+    #object2{
+        transform:translate3d(-50%,-50%,0);
+        backface-visibility:hidden;
+        will-change:opacity;
+    }
+
+    #letterScene,
+    #savedLetterScene,
+    #finalScene,
+    #fadeScreen{
+        width:100vw;
+        height:100vh;
+        height:100dvh;
+    }
 
 }
