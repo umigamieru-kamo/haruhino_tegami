@@ -1369,40 +1369,7 @@ font-size:32px;
     text-align: center;
 }
 
-/* =========================
-   戻るボタン
-========================= */
 
-#diaryBackButton,
-#drawerBackButton {
-    align-items: center;
-    justify-content: center;
-    min-width: 170px;
-    height: 52px;
-    margin-top: 22px;
-    padding: 0 28px;
-    border: 0;
-    border-radius: 999px;
-    color: #714a68;
-    background: linear-gradient(180deg, #ffdbea, #f6b6d4);
-    font-size: 17px;
-    box-shadow:
-        0 6px 18px rgba(255,170,210,.35),
-        inset 0 1px 2px rgba(255,255,255,.65);
-}
-
-#diaryBackButton {
-    display: none;
-}
-
-#drawerBackButton {
-    display: flex;
-}
-
-#diaryBackButton:hover,
-#drawerBackButton:hover {
-    filter: brightness(1.05);
-}
 
 /* =========================
    春陽の引き出し
@@ -1891,26 +1858,185 @@ body.ready {
 
 
 /* =========================
-   スマホ版 戻るボタン
+   日記・引き出し画面戻るボタン
 ========================= */
 
-@media (max-width: 768px){
+/* 日記画面は下部ボタン分の余白を確保 */
+#diaryScene {
+    padding-bottom:
+        calc(110px + env(safe-area-inset-bottom));
+
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+/* 引き出し画面も下部ボタン分の余白を確保 */
+#drawerScene {
+    padding-bottom:
+        calc(110px + env(safe-area-inset-bottom));
+
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+
+/* 共通デザイン */
+#diaryBackButton,
+#drawerBackButton {
+    align-items: center;
+    justify-content: center;
+
+    width: 180px;
+    min-width: 180px;
+    height: 54px;
+
+    padding: 0;
+
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    border-radius: 999px;
+
+    color: #714f68;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffdce9,
+            #eee2ff,
+            #dceeff
+        );
+
+    font-family: "Kaisei Decol", serif;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+
+    box-shadow:
+        0 8px 22px rgba(170, 125, 165, 0.28),
+        inset 0 2px 2px rgba(255, 255, 255, 0.8);
+
+    cursor: pointer;
+
+    pointer-events: auto;
+
+    z-index: 5000;
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        filter 0.25s ease;
+}
+
+#diaryBackButton::before,
+#drawerBackButton::before {
+    content: none;
+}
+
+#diaryBackButton:hover,
+#drawerBackButton:hover {
+    transform: translateY(-2px);
+
+    filter: brightness(1.04);
+
+    box-shadow:
+        0 12px 28px rgba(170, 125, 165, 0.36),
+        inset 0 2px 2px rgba(255, 255, 255, 0.9);
+}
+
+#diaryBackButton:active,
+#drawerBackButton:active {
+    transform: scale(0.97);
+}
+
+
+/* 日記の戻るボタンは、
+   JavaScriptが最後のページでflexにする */
+#diaryBackButton {
+    display: none;
+
+    flex-shrink: 0;
+
+    margin-top: 22px;
+}
+
+
+/* 引き出しの戻るボタンは常時表示 */
+#drawerBackButton {
+    display: flex;
+
+    flex-shrink: 0;
+
+    margin-top: 24px;
+}
+
+
+/* =========================
+   スマホ
+========================= */
+
+@media (max-width: 768px) {
+
+    #diaryScene,
+    #drawerScene {
+        min-height: 100dvh;
+
+        padding-bottom:
+            calc(100px + env(safe-area-inset-bottom));
+    }
 
     #diaryBackButton,
-    #drawerBackButton{
-
+    #drawerBackButton {
         position: fixed;
 
         left: 50%;
-        bottom: 20px;
+
+        bottom:
+            calc(16px + env(safe-area-inset-bottom));
 
         transform: translateX(-50%);
 
+        width: min(200px, 68vw);
+        min-width: 0;
+        height: 54px;
+
+        margin: 0;
+
+        font-size: 17px;
+
         z-index: 9999;
-
-        width: 180px;
-        height: 52px;
-
     }
+
+    #diaryBackButton:hover,
+    #drawerBackButton:hover {
+        transform:
+            translateX(-50%)
+            translateY(-2px);
+    }
+
+    #diaryBackButton:active,
+    #drawerBackButton:active {
+        transform:
+            translateX(-50%)
+            scale(0.97);
+    }
+
+}
+
+
+/* 特に縦幅が小さいスマホ */
+@media (max-width: 480px),
+       (max-height: 700px) {
+
+    #diaryBackButton,
+    #drawerBackButton {
+        bottom:
+            calc(10px + env(safe-area-inset-bottom));
+
+        width: min(190px, 72vw);
+        height: 48px;
+
+        font-size: 16px;
+    }
+
+}
 
 }
