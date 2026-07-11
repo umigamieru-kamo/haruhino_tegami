@@ -873,7 +873,7 @@ function showSavedLetter() {
     ) {
 
         reply +=
-            "\nハルヒは笑顔を作った！";
+            "\nネコネコカワイイヤッター！";
 
     }
 
@@ -908,6 +908,18 @@ function showSavedLetter() {
 
         reply +=
             "\n可愛い？えへへ～";
+
+    }
+
+       if (
+
+        savedLetter.includes("おうえん") ||
+        savedLetter.includes("応援")
+
+    ) {
+
+        reply +=
+            "\n応援もありがと！！";
 
     }
     
