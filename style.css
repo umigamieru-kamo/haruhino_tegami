@@ -1,0 +1,1890 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    font-family:sans-serif;
+}
+
+body {
+    font-family: "Zen Old Mincho", serif;
+}
+
+#background{
+    position:fixed;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+    background-image:url("assets/bg/bg1.jpg");
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+    z-index:-1;
+}
+
+/* =========================
+   最初のタイトル画面
+========================= */
+
+#ui {
+    position: fixed;
+    inset: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    min-height: 100vh;
+
+    padding: 24px;
+
+    pointer-events: none;
+
+    z-index: 50;
+}
+
+
+/* =========================
+   タイトル
+========================= */
+
+#title {
+    width: fit-content;
+    max-width: min(900px, 92vw);
+
+    margin: 0 0 42px;
+    padding: 20px 42px 24px;
+
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    border-radius: 24px;
+
+    color: #774f73;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 245, 250, 0.92),
+            rgba(238, 247, 255, 0.92)
+        );
+
+    font-family:"Kaisei Decol", serif;
+
+    font-size:clamp(42px,6vw,72px);
+
+    font-weight:700;
+
+    color:#7a5778;
+
+    letter-spacing:.12em;
+
+    text-align: center;
+    white-space: nowrap;
+
+    text-shadow:
+        0 2px 0 rgba(255, 255, 255, 0.95),
+        0 4px 12px rgba(126, 84, 120, 0.22);
+
+    box-shadow:
+        0 14px 38px rgba(116, 137, 190, 0.22),
+        0 0 24px rgba(255, 255, 255, 0.65),
+        inset 0 0 18px rgba(255, 255, 255, 0.75);
+
+    animation: titleFade 1.8s ease;
+
+    pointer-events: auto;
+}
+
+@keyframes titleFade {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+        filter: blur(6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+    }
+}
+
+
+/* =========================
+   はじめるボタン
+========================= */
+
+#startButton {
+    width: min(300px, 78vw);
+    height: 72px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 30px;
+
+    border: 2px solid rgba(255, 255, 255, 0.95);
+    border-radius: 999px;
+
+    color: #6d4f6c;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffd8e9 0%,
+            #efe0ff 48%,
+            #d9edff 100%
+        );
+
+    font-family:"Kaisei Decol", serif;
+
+    font-size:30px;
+
+    font-weight:700;
+    letter-spacing: 0.16em;
+
+    box-shadow:
+        0 10px 26px rgba(126, 139, 195, 0.25),
+        inset 0 2px 2px rgba(255, 255, 255, 0.85);
+
+    cursor: pointer;
+
+    pointer-events: auto;
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        filter 0.25s ease;
+}
+
+#startButton::before {
+    content: none;
+}
+
+#startButton:hover {
+    transform: translateY(-4px) scale(1.03);
+
+    filter: brightness(1.04);
+
+    box-shadow:
+        0 16px 34px rgba(222, 144, 190, 0.3),
+        0 0 20px rgba(255, 255, 255, 0.7),
+        inset 0 2px 2px rgba(255, 255, 255, 0.9);
+}
+
+#startButton:active {
+    transform: scale(0.98);
+}
+
+
+/*==========================
+ ボタン
+==========================*/
+
+
+
+
+button{
+
+    font-family:"Zen Old Mincho",serif;
+
+    font-size:24px;
+
+    letter-spacing:.15em;
+
+    color:white;
+
+    cursor:pointer;
+
+    padding:18px 48px;
+
+    border:1px solid rgba(255,255,255,.45);
+
+    border-radius:14px;
+
+    background:
+    linear-gradient(
+        180deg,
+        rgba(255,255,255,.18),
+        rgba(255,255,255,.05)
+    );
+
+    backdrop-filter:blur(8px);
+
+    box-shadow:
+        0 8px 30px rgba(0,0,0,.45),
+        0 0 12px rgba(255,255,255,.12);
+
+    transition:.35s;
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+button::before{
+
+    content:"";
+
+    position:absolute;
+
+    left:-120%;
+
+    top:0;
+
+    width:80%;
+
+    height:100%;
+
+    background:
+    linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,.35),
+        transparent
+    );
+
+    transition:1s;
+
+}
+
+button:hover{
+
+    transform:translateY(-2px);
+
+    border-color:white;
+
+    box-shadow:
+        0 12px 35px rgba(0,0,0,.5),
+        0 0 20px rgba(255,255,255,.25);
+
+}
+
+button:hover::before{
+
+    left:130%;
+
+}
+
+button:active{
+
+    transform:scale(.97);
+
+}
+
+
+/*==========================
+ メッセージボックス
+==========================*/
+
+#messageBox{
+
+    display:none;
+
+    position:fixed;
+
+    left:50%;
+
+    bottom:70px;
+
+    transform:translateX(-50%);
+
+    width:90%;
+
+    max-width:900px;
+
+    height:140px;
+
+    padding:20px;
+
+    background:rgba(8,8,8,.82);
+
+    border:2px solid rgba(255,255,255,.6);
+
+    border-radius:12px;
+
+    backdrop-filter:blur(5px);
+
+    box-shadow:
+        0 0 30px rgba(255,255,255,.08);
+
+    color:white;
+
+}
+
+#messageText{
+
+    font-family:"Zen Old Mincho",serif;
+
+    font-size:29px;
+
+    line-height:2;
+
+    letter-spacing:.08em;
+
+    text-shadow:
+        0 0 6px rgba(255,255,255,.18);
+
+}
+
+#nextMark{
+
+    margin-top:6px;
+
+    opacity:.55;
+
+    font-size:18px;
+
+    animation:updown 1.2s infinite;
+
+}
+
+@keyframes updown{
+
+    0%{
+
+        transform:translateY(0);
+
+    }
+
+    50%{
+
+        transform:translateY(-6px);
+
+    }
+
+    100%{
+
+        transform:translateY(0);
+
+    }
+
+}
+
+/*==========================
+ 手紙入力
+==========================*/
+
+#letterScene{
+
+    display:none;
+
+    position:fixed;
+
+    left:0;
+
+    top:0;
+
+    width:100%;
+
+    height:100%;
+
+    justify-content:center;
+
+    align-items:center;
+
+    flex-direction:column;
+
+    background:rgba(0,0,0,.15);
+
+    animation:fadeScene 1.8s;
+
+}
+
+@keyframes fadeScene{
+
+    from{
+
+        opacity:0;
+
+    }
+
+    to{
+
+        opacity:1;
+
+    }
+
+}
+
+#letter{
+
+    position:relative;
+
+    width:520px;
+
+    height:680px;
+
+    padding:60px;
+
+    border-radius:6px;
+
+    background:
+    linear-gradient(
+        180deg,
+        #faf6ef,
+        #f4efdf
+    );
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.45);
+
+    animation:letterAppear 2s;
+
+}
+
+#letter::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+    repeating-linear-gradient(
+
+        transparent,
+
+        transparent 34px,
+
+        rgba(0,0,0,.05) 35px
+
+    );
+
+    pointer-events:none;
+
+}
+
+@keyframes letterAppear{
+
+    from{
+
+        opacity:0;
+
+        transform:
+        translateY(60px)
+        scale(.95);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:
+        translateY(0)
+        scale(1);
+
+    }
+
+}
+
+#letterInput{
+
+    width:100%;
+
+    height:100%;
+
+    resize:none;
+
+    border:none;
+
+    outline:none;
+
+    background:transparent;
+
+    font-family:"Zen Old Mincho",serif;
+
+    font-size:27px;
+
+    line-height:2.15;
+
+    letter-spacing:.08em;
+
+    color:#333;
+
+}
+
+#letterCount{
+
+    position:absolute;
+
+    right:25px;
+
+    bottom:20px;
+
+    font-size:18px;
+
+    color:#777;
+
+}
+
+#sendLetter{
+
+    margin-top:45px;
+
+    min-width:360px;
+
+}
+
+/*==========================
+ 手紙再表示
+==========================*/
+
+#savedLetterScene{
+
+    display:none;
+
+    position:fixed;
+
+    left:0;
+    top:0;
+
+    width:100%;
+    height:100%;
+
+    justify-content:center;
+    align-items:center;
+
+    background:rgba(0,0,0,.2);
+
+    animation:fadeScene 1s;
+
+}
+
+#savedLetterPaper{
+
+    display:flex;
+
+    flex-direction:column;
+
+    width:520px;
+
+    height:680px;
+
+    padding:60px;
+
+    background:
+    linear-gradient(
+        180deg,
+        #faf6ef,
+        #f4efdf
+    );
+
+    border-radius:6px;
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.45);
+
+    overflow:hidden;
+
+    position:relative;
+
+}
+
+#savedLetterPaper::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+    repeating-linear-gradient(
+
+        transparent,
+
+        transparent 34px,
+
+        rgba(0,0,0,.05) 35px
+
+    );
+
+    pointer-events:none;
+
+}
+
+#savedLetterText{
+
+    flex:1;
+
+    font-family:"Zen Old Mincho",serif;
+
+    font-size:27px;
+
+    line-height:2.15;
+
+    letter-spacing:.08em;
+
+    color:#333;
+
+    white-space:pre-wrap;
+
+    word-break:break-word;
+
+    overflow-wrap:anywhere;
+
+}
+
+#replyMessage{
+
+    margin-top:28px;
+
+    font-family:"Zen Old Mincho",serif;
+
+    font-size:23px;
+
+    line-height:1.9;
+
+    letter-spacing:.05em;
+
+    color:#666;
+
+    white-space:pre-wrap;
+
+    flex-shrink:0;
+
+    text-align:right;
+
+}
+
+/*==========================
+ 暗転
+==========================*/
+
+#fadeScreen {
+    position: fixed;
+    inset: 0;
+
+    background: black;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    z-index: 500;
+
+    transition: opacity 1s ease;
+}
+
+
+
+#fadeText {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    transform: translate(-50%, -50%);
+
+    width: 90%;
+
+    color: white;
+    text-align: center;
+
+    font-family: "Zen Old Mincho", serif;
+    font-size: clamp(20px, 2.4vw, 34px);
+    font-weight: 400;
+    line-height: 1.8;
+    letter-spacing: 0.08em;
+
+    white-space: pre-line;
+
+    opacity: 0;
+
+    z-index: 20;
+
+    transition:
+        opacity 0.8s ease,
+        top 0.8s ease;
+}
+
+#fadeText {
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    text-shadow:
+        0 0 8px rgba(255, 255, 255, 0.25);
+}
+
+#fadeText {
+    transition: opacity 1.2s ease;
+}
+
+/*==========================
+ 共通アニメーション
+==========================*/
+
+.fadeOut{
+
+    animation:fadeOut 1.5s forwards;
+
+}
+
+@keyframes fadeOut{
+
+    from{
+
+        opacity:1;
+
+    }
+
+    to{
+
+        opacity:0;
+
+    }
+
+}
+
+.fadeIn{
+
+    animation:fadeIn 1.5s forwards;
+
+}
+
+@keyframes fadeIn{
+
+    from{
+
+        opacity:0;
+
+    }
+
+    to{
+
+        opacity:1;
+
+    }
+
+}
+
+#hotspot1{
+
+    position:absolute;
+
+    left:55%;
+    top:42%;
+
+width:100px;
+height:100px;
+
+    border-radius:50%;
+
+    display:none;
+
+    cursor:pointer;
+
+    background:rgba(255,255,255,.2);
+
+    box-shadow:
+        0 0 20px white,
+        0 0 45px rgba(255,255,255,.8),
+        0 0 70px rgba(255,255,255,.5);
+
+    animation:pulse 1.8s infinite;
+
+    z-index:300;
+
+}
+
+@keyframes pulse{
+
+    0%{
+
+        transform:scale(.8);
+        opacity:.3;
+
+    }
+
+    50%{
+
+        transform:scale(1.2);
+        opacity:.8;
+
+    }
+
+    100%{
+
+        transform:scale(.8);
+        opacity:.3;
+
+    }
+
+}
+
+#object1{
+
+    display:none;
+
+    position:absolute;
+
+    left:50%;
+    top:50%;
+
+    transform:translate(-50%,-50%);
+
+    width:420px;
+
+    max-height:90vh;
+
+    object-fit:contain;
+
+    z-index:50;
+
+}
+
+#hotspot2 {
+    display: none;
+
+    position: fixed;
+    left: 30%;
+    top: 45%;
+
+    width: 90px;
+    height: 90px;
+
+    border-radius: 50%;
+
+    cursor: pointer;
+
+    background: rgba(255, 255, 255, 0.35);
+
+    box-shadow:
+        0 0 20px rgba(255, 255, 255, 0.9),
+        0 0 45px rgba(255, 255, 255, 0.7),
+        0 0 80px rgba(255, 255, 255, 0.45);
+
+    animation: hotspotPulse 1.6s infinite;
+
+    z-index: 150;
+}
+
+#object2 {
+    display: none;
+
+    position: fixed;
+    left: 50%;
+    top: 35%;
+
+    transform: translate(-50%, -50%);
+
+    width: min(480px, 75vw);
+    max-height: 52vh;
+
+    object-fit: contain;
+
+    z-index: 200;
+
+    pointer-events: none;
+}
+
+@keyframes hotspotPulse {
+    0% {
+        transform: scale(0.85);
+        opacity: 0.35;
+    }
+
+    50% {
+        transform: scale(1.2);
+        opacity: 0.9;
+    }
+
+    100% {
+        transform: scale(0.85);
+        opacity: 0.35;
+    }
+}
+
+#hotspot3 {
+    display: none;
+
+    position: fixed;
+    left: 68%;
+    top: 52%;
+
+    width: 90px;
+    height: 90px;
+
+    border-radius: 50%;
+
+    cursor: pointer;
+
+    background: rgba(255, 255, 255, 0.35);
+
+    box-shadow:
+        0 0 20px rgba(255, 255, 255, 0.9),
+        0 0 45px rgba(255, 255, 255, 0.7),
+        0 0 80px rgba(255, 255, 255, 0.45);
+
+    animation: hotspotPulse 1.6s infinite;
+
+    z-index: 150;
+}
+
+#savedLetterPaper{
+
+    transition:0.8s;
+
+}
+
+#savedLetterPaper{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    transition:top .5s ease;
+}
+
+#choiceBox{
+
+    display:none;
+
+    position:fixed;
+
+    left:50%;
+    top:68%;
+
+    transform:translate(-50%,-50%);
+
+    flex-direction:column;
+
+    gap:18px;
+
+    z-index:400;
+
+}
+
+#choiceBox button{
+
+width:300px;
+height:80px;
+font-size:32px;
+
+    font-family:"Zen Old Mincho", serif;
+
+    border-radius:16px;
+
+    background:#3a3a3a;
+    color:white;
+
+    border:2px solid rgba(255,255,255,0.35);
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+
+#choiceBox button:hover{
+
+    background:#565656;
+
+    transform:scale(1.05);
+
+    box-shadow:0 0 20px rgba(255,255,255,.25);
+
+}
+
+#choiceBox button:active{
+
+    background:#666;
+
+}
+
+#fireVideo {
+    display: none;
+
+    position: fixed;
+    left: 50%;
+    top: 50%;
+
+    transform: translate(-50%, -50%);
+
+    width: 100vw;
+    height: 100vh;
+
+    object-fit: cover;
+
+    opacity: 1;
+
+    pointer-events: none;
+
+    z-index: 250;
+}
+
+/* 炎よりもメッセージ枠を手前に表示 */
+#messageBox {
+    z-index: 300;
+}
+
+/* 選択肢は最前面 */
+#choiceBox {
+    z-index: 400;
+}
+
+#fireVideo {
+    mix-blend-mode: screen;
+}
+
+#endingPortrait {
+    display: none;
+
+    position: absolute;
+    left: 50%;
+    top: 50%;
+
+    transform: translate(-50%, -50%);
+
+    width: auto;
+    height: min(70vh, 720px);
+    max-width: 80vw;
+
+    object-fit: contain;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    z-index: 10;
+
+    transition: opacity 1.5s ease;
+}
+
+#finalScene {
+    display: none;
+
+    position: fixed;
+    inset: 0;
+
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    gap: 36px;
+
+    opacity: 0;
+
+    z-index: 600;
+
+    transition: opacity 1.8s ease;
+
+}
+
+#finalTitle {
+    color: white;
+
+    font-family: "Zen Old Mincho", serif;
+    font-size: clamp(34px, 5vw, 72px);
+    font-weight: 400;
+
+    letter-spacing: 0.16em;
+
+    text-align: center;
+
+    text-shadow:
+        0 0 10px rgba(0, 0, 0, 0.8),
+        0 0 24px rgba(0, 0, 0, 0.7);
+}
+
+#shareButton {
+    min-width: 210px;
+    height: 54px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 28px;
+
+    color: white;
+    background: rgba(20, 20, 20, 0.85);
+
+    border: 1px solid rgba(255, 255, 255, 0.65);
+
+    font-family: "Zen Old Mincho", serif;
+    font-size: 17px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.25s ease,
+        border-color 0.25s ease;
+}
+
+#shareButton:hover {
+    background: rgba(55, 55, 55, 0.95);
+    border-color: white;
+}
+
+/* =========================
+   最終画面の隠しボタン
+========================= */
+
+#secretHotspot {
+    display: none;
+
+    position: absolute;
+    right: 7%;
+    bottom: 9%;
+
+    width: 70px;
+    height: 70px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255, 255, 255, 0.75) 0%,
+            rgba(255, 255, 255, 0.25) 35%,
+            rgba(255, 255, 255, 0) 75%
+        );
+
+    box-shadow:
+        0 0 25px rgba(255, 255, 255, 0.65),
+        0 0 55px rgba(255, 255, 255, 0.35);
+
+    cursor: pointer;
+
+    z-index: 1000;
+
+    animation: secretGlow 1.8s ease-in-out infinite;
+}
+
+@keyframes secretGlow {
+
+    0%,
+    100% {
+        opacity: 0.35;
+        transform: scale(0.9);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.15);
+    }
+
+}
+
+
+/* =========================
+   春陽の日記
+========================= */
+
+#diaryScene {
+    display: none;
+    position: fixed;
+    inset: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 28px 24px 50px;
+    color: #5c5163;
+    background:
+        radial-gradient(circle at 12% 10%, rgba(255,255,255,.9), transparent 24%),
+        radial-gradient(circle at 88% 18%, rgba(229,222,255,.65), transparent 26%),
+        linear-gradient(180deg, #fff7fb 0%, #ffeef5 38%, #f1f8ff 100%);
+    opacity: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    z-index: 800;
+    transition: opacity 1s ease;
+    pointer-events: auto;
+}
+
+#diaryTitle {
+    margin: 0 0 20px;
+    color: #7b5f9e;
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 400;
+    letter-spacing: .15em;
+    text-shadow: 0 2px 8px rgba(255,255,255,.8);
+}
+
+#diaryPage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: min(500px, 88vw);
+    height: min(520px, 58vh);
+    border: 4px solid #f8d7e8;
+    border-radius: 20px;
+    background: #fffdf8;
+    box-shadow:
+        0 12px 35px rgba(255,170,210,.25),
+        inset 0 0 24px rgba(255,238,247,.8);
+    cursor: pointer;
+    overflow: hidden;
+}
+
+#diaryCover {
+    color: #7a6170;
+    font-size: clamp(28px, 5vw, 48px);
+    letter-spacing: .16em;
+    text-align: center;
+}
+
+#diaryImage {
+    display: none;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+#diaryGuide {
+    margin-top: 14px;
+    color: #8b758e;
+    font-size: 14px;
+    opacity: .85;
+}
+
+/* =========================
+   パスワード
+========================= */
+
+#passwordArea {
+    display: none;
+    position: relative;
+    width: min(760px, 94vw);
+    min-height: 132px;
+    margin: 18px auto 0;
+    padding: 28px;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    border: 2px solid rgba(248,191,216,.78);
+    border-radius: 28px;
+    background:
+        linear-gradient(145deg, rgba(255,255,255,.84), rgba(255,241,248,.78));
+    box-shadow:
+        0 12px 30px rgba(255,170,210,.24),
+        inset 0 0 24px rgba(255,255,255,.7);
+    opacity: 1;
+    visibility: visible;
+    z-index: 950;
+}
+
+#passwordGlow {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: min(560px, 82vw);
+    height: 140px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background:
+        radial-gradient(ellipse, rgba(255,205,230,.62) 0%, rgba(220,215,255,.28) 42%, transparent 76%);
+    filter: blur(10px);
+    pointer-events: none;
+    z-index: 0;
+    animation: passwordGlowPulse 2.2s ease-in-out infinite;
+}
+
+@keyframes passwordGlowPulse {
+    0%, 100% {
+        opacity: .35;
+        transform: translate(-50%, -50%) scale(.94);
+    }
+    50% {
+        opacity: .85;
+        transform: translate(-50%, -50%) scale(1.06);
+    }
+}
+
+#passwordInput {
+    position: relative;
+    z-index: 2;
+    width: min(430px, 64vw);
+    height: 62px;
+    padding: 0 20px;
+    border: 2px solid #f7bfd8;
+    border-radius: 14px;
+    outline: none;
+    color: #6a5574;
+    background: #fffdfd;
+    font-family: "Zen Old Mincho", serif;
+    font-size: 24px;
+    box-shadow:
+        inset 0 2px 8px rgba(255,180,220,.18),
+        0 0 0 4px rgba(255,255,255,.45);
+}
+
+#passwordInput:focus {
+    border-color: #df9bc2;
+    box-shadow:
+        inset 0 2px 8px rgba(255,180,220,.18),
+        0 0 0 5px rgba(247,191,216,.22);
+}
+
+#passwordInput::placeholder {
+    color: #b79ab8;
+}
+
+#passwordButton {
+    position: relative;
+    z-index: 2;
+    width: 140px;
+    height: 62px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    border-radius: 14px;
+    color: #6a4560;
+    background: linear-gradient(180deg, #ffdbea, #f8b8d6);
+    font-size: 22px;
+    box-shadow:
+        0 6px 14px rgba(255,180,220,.3),
+        inset 0 1px 2px rgba(255,255,255,.72);
+}
+
+#passwordButton:hover {
+    background: linear-gradient(180deg, #ffe8f1, #ffc8df);
+}
+
+#passwordMessage {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    min-height: 28px;
+    margin-top: 4px;
+    color: #9b6281;
+    font-size: 18px;
+    text-align: center;
+}
+
+/* =========================
+   戻るボタン
+========================= */
+
+#diaryBackButton,
+#drawerBackButton {
+    align-items: center;
+    justify-content: center;
+    min-width: 170px;
+    height: 52px;
+    margin-top: 22px;
+    padding: 0 28px;
+    border: 0;
+    border-radius: 999px;
+    color: #714a68;
+    background: linear-gradient(180deg, #ffdbea, #f6b6d4);
+    font-size: 17px;
+    box-shadow:
+        0 6px 18px rgba(255,170,210,.35),
+        inset 0 1px 2px rgba(255,255,255,.65);
+}
+
+#diaryBackButton {
+    display: none;
+}
+
+#drawerBackButton {
+    display: flex;
+}
+
+#diaryBackButton:hover,
+#drawerBackButton:hover {
+    filter: brightness(1.05);
+}
+
+/* =========================
+   春陽の引き出し
+========================= */
+
+#drawerScene {
+    display: none;
+    position: fixed;
+    inset: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 36px 20px 50px;
+    color: #5d566d;
+    background:
+        radial-gradient(circle at 12% 10%, rgba(255,255,255,.92), transparent 25%),
+        radial-gradient(circle at 88% 16%, rgba(224,218,255,.7), transparent 27%),
+        linear-gradient(180deg, #fff7fb, #f8f5ff, #eef8ff);
+    overflow-y: auto;
+    z-index: 900;
+}
+
+#drawerTitle {
+    margin: 0 0 28px;
+    color: #8a6794;
+    font-size: clamp(30px, 4vw, 46px);
+    font-weight: 400;
+    letter-spacing: .16em;
+    text-shadow:
+        0 2px 10px rgba(255,255,255,.9),
+        0 0 20px rgba(255,190,220,.4);
+}
+
+#galleryGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 24px;
+    width: min(900px, 90vw);
+    padding: 34px;
+    border: 3px solid rgba(255,207,226,.7);
+    border-radius: 26px;
+    background:
+        linear-gradient(145deg, rgba(255,255,255,.74), rgba(255,237,247,.62));
+    box-shadow:
+        0 18px 42px rgba(183,143,180,.2),
+        inset 0 0 28px rgba(255,255,255,.8);
+}
+
+.galleryItem {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 3 / 4;
+    padding: 0;
+    border: 4px solid #ffd5e8;
+    border-radius: 18px;
+    color: #7d6070;
+    background: linear-gradient(180deg, #fffefb, #fff4f8);
+    font-size: 32px;
+    font-weight: 700;
+    box-shadow:
+        0 10px 22px rgba(255,170,210,.22),
+        inset 0 0 16px rgba(255,255,255,.8);
+    cursor: pointer;
+    transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.galleryItem:hover {
+    transform: translateY(-5px) rotate(-1deg) scale(1.03);
+    box-shadow:
+        0 16px 32px rgba(255,170,210,.36),
+        inset 0 0 16px rgba(255,255,255,.85);
+}
+
+/* =========================
+   ギャラリー拡大表示
+========================= */
+
+#galleryModal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    align-items: center;
+    justify-content: center;
+    padding: 22px;
+    background:
+        radial-gradient(circle, rgba(255,255,255,.42), rgba(255,215,235,.74)),
+        linear-gradient(180deg, #fff8fc, #f8f3ff, #eef8ff);
+    cursor: pointer;
+    z-index: 1200;
+}
+
+#galleryLargeImage {
+    display: block;
+    width: auto;
+    height: min(82vh, 900px);
+    max-width: 90vw;
+    object-fit: contain;
+    border: 6px solid #fff;
+    border-radius: 20px;
+    box-shadow:
+        0 18px 46px rgba(180,120,165,.35),
+        0 0 28px rgba(255,255,255,.65);
+    pointer-events: none;
+}
+
+/* =========================
+   スマホ用
+========================= */
+
+@media (max-width: 768px) {
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+    #title {
+        margin-bottom: 50px;
+        font-size: clamp(34px, 10vw, 52px);
+    }
+
+    button {
+        padding: 14px 26px;
+        font-size: 18px;
+    }
+
+    #messageBox {
+        bottom: 20px;
+        width: 94%;
+        min-height: 130px;
+        padding: 16px;
+    }
+
+    #messageText {
+        font-size: clamp(18px, 5vw, 24px);
+        line-height: 1.8;
+    }
+
+    #letter,
+    #savedLetterPaper {
+        width: 92vw;
+        height: min(72vh, 680px);
+        padding: 34px 28px;
+    }
+
+    #letterInput,
+    #savedLetterText {
+        font-size: clamp(18px, 4.8vw, 24px);
+        line-height: 1.9;
+    }
+
+    #replyMessage {
+        font-size: clamp(16px, 4.2vw, 21px);
+    }
+
+    #sendLetter {
+        width: 88vw;
+        min-width: 0;
+        margin-top: 24px;
+        font-size: 17px;
+    }
+
+    #choiceBox {
+        bottom: 70px;
+    }
+
+    #diaryPage {
+        width: 90vw;
+        height: 54vh;
+    }
+
+    #passwordArea {
+        width: 92vw;
+        padding: 22px 16px;
+    }
+
+    #passwordInput {
+        width: min(62vw, 430px);
+        font-size: 20px;
+    }
+
+    #passwordButton {
+        width: 120px;
+        font-size: 19px;
+    }
+
+    #galleryGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: 92vw;
+        padding: 22px;
+        gap: 14px;
+    }
+
+    .galleryItem {
+        font-size: 26px;
+        border-radius: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    #passwordArea {
+        flex-direction: column;
+    }
+
+    #passwordInput,
+    #passwordButton {
+        width: 82vw;
+        max-width: 100%;
+    }
+
+    #galleryGrid {
+        grid-template-columns: 1fr;
+    }
+
+    #galleryLargeImage {
+        width: min(92vw, 520px);
+        height: auto;
+        max-height: 82vh;
+    }
+}
+
+@media (max-width: 600px) {
+
+    #ui {
+        padding: 18px;
+    }
+
+    #title {
+        max-width: 94vw;
+
+        margin-bottom: 30px;
+        padding: 16px 20px 19px;
+
+        font-size: clamp(31px, 9.5vw, 48px);
+        letter-spacing: 0.06em;
+
+        white-space: normal;
+    }
+
+    #startButton {
+        width: min(280px, 82vw);
+        height: 64px;
+
+        font-size: 23px;
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    #ui {
+        padding: 18px;
+    }
+
+    #title {
+        max-width: 94vw;
+
+        margin-bottom: 28px;
+        padding: 15px 18px 18px;
+
+        font-size: clamp(30px, 9vw, 46px);
+        line-height: 1.35;
+        letter-spacing: 0.05em;
+
+        white-space: normal;
+    }
+
+    #startButton {
+        width: min(280px, 82vw);
+        height: 64px;
+
+        font-size: 23px;
+    }
+
+}
+
+/* =========================
+   クレジットボタン
+========================= */
+
+#finalScene {
+    pointer-events: auto;
+}
+
+#creditButton {
+    display: none;
+
+    position: fixed;
+
+    left: 24px;
+    bottom: 24px;
+
+    width: 128px;
+    height: 44px;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border: 1px solid rgba(210, 205, 215, 0.65);
+    border-radius: 8px;
+
+    color: #ddd8df;
+    background: rgba(42, 40, 46, 0.88);
+
+    font-family: "Zen Old Mincho", serif;
+    font-size: 16px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+
+    box-shadow: 0 5px 16px rgba(0, 0, 0, 0.3);
+
+    cursor: pointer;
+    pointer-events: auto;
+
+    z-index: 1600;
+
+    transition:
+        background 0.25s ease,
+        border-color 0.25s ease,
+        transform 0.25s ease;
+}
+
+#creditButton::before {
+    content: none;
+}
+
+#creditButton:hover {
+    background: rgba(64, 61, 69, 0.96);
+    border-color: rgba(245, 242, 247, 0.85);
+    transform: translateY(-2px);
+}
+
+#creditButton:active {
+    transform: scale(0.97);
+}
+
+
+/* =========================
+   クレジット画面
+========================= */
+
+#creditScene {
+    display: none;
+
+    position: fixed;
+    inset: 0;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 24px;
+
+    background: rgba(20, 18, 24, 0.72);
+
+    backdrop-filter: blur(6px);
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    z-index: 3000;
+
+    transition: opacity 0.35s ease;
+}
+
+#creditScene.open {
+    display: flex;
+
+    opacity: 1;
+
+    pointer-events: auto;
+}
+
+#creditCard {
+    width: min(520px, 92vw);
+    max-height: 82vh;
+
+    padding: 38px 34px;
+
+    overflow-y: auto;
+
+    border: 1px solid rgba(220, 215, 225, 0.8);
+    border-radius: 18px;
+
+    color: #514b56;
+
+    background:
+        linear-gradient(
+            145deg,
+            #faf8fa,
+            #eeeaf0
+        );
+
+    text-align: center;
+
+    box-shadow:
+        0 22px 60px rgba(0, 0, 0, 0.42);
+
+    transform: scale(0.96);
+
+    transition: transform 0.35s ease;
+}
+
+#creditScene.open #creditCard {
+    transform: scale(1);
+}
+
+#creditCard h2 {
+    margin-bottom: 26px;
+
+    color: #5e5764;
+
+    font-family: "Kaisei Decol", serif;
+    font-size: 36px;
+    font-weight: 700;
+
+    letter-spacing: 0.12em;
+}
+
+#creditText p {
+    margin-bottom: 24px;
+
+    font-size: 17px;
+    line-height: 1.9;
+}
+
+#creditClose {
+    width: 160px;
+    height: 50px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 12px auto 0;
+    padding: 0;
+
+    border: 1px solid #aaa3ad;
+    border-radius: 8px;
+
+    color: #eee;
+
+    background: #514c55;
+
+    font-size: 17px;
+}
+
+#creditClose::before {
+    content: none;
+}
+
+#creditClose:hover {
+    background: #68616d;
+}
+
+@media (max-width: 600px) {
+
+    #creditButton {
+        left: 12px;
+        bottom: 12px;
+
+        width: 104px;
+        height: 40px;
+
+        font-size: 14px;
+    }
+
+    #creditCard {
+        padding: 28px 20px;
+    }
+
+}
+
+body.loading {
+    visibility: hidden;
+}
+
+body.ready {
+    visibility: visible;
+}

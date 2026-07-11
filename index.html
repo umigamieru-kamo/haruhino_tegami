@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>またねの約束。</title>
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@400;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link href="https://fonts.googleapis.com/css2?family=Kaisei+Decol:wght@400;700&display=swap" rel="stylesheet">
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+</head>
+
+
+
+<body class="loading">
+
+<audio id="voice1" src="assets/audio/voice1.mp3"></audio>
+<audio id="voice2" src="assets/audio/voice2.mp3"></audio>
+
+<audio
+    id="bgm3"
+    src="assets/audio/bgm3.mp3"
+    loop>
+</audio>
+
+<audio
+    id="pageSound"
+    src="assets/audio/page.mp3"
+    preload="auto">
+</audio>
+
+<div id="fadeScreen">
+
+    <img
+        id="endingPortrait"
+        src="assets/images/portrait.png"
+        alt=""
+    >
+
+    <div id="fadeText"></div>
+
+</div>
+
+
+<div id="background"></div>
+
+<div id="hotspot1"></div>
+
+<img
+    id="object1"
+    src="assets/images/object1.png">
+<div id="ui">
+
+    <h1 id="title">
+        またねの約束。
+    </h1>
+
+    <button id="startButton">
+        はじめる
+    </button>
+
+</div>
+
+<div id="hotspot2"></div>
+
+<div id="hotspot3"></div>
+
+<img
+    id="object2"
+    src="assets/images/object2.png"
+    alt="CD"
+>
+
+<div id="messageBox">
+
+    <div id="messageText"></div>
+
+    <div id="nextMark">▼</div>
+
+</div>
+
+<div id="letterScene">
+
+    <div id="letter">
+
+        <textarea
+            id="letterInput"
+            maxlength="50"
+            placeholder="ここに手紙を書いてください。"
+        ></textarea>
+
+        <div id="letterCount">
+
+            0 / 50
+
+        </div>
+
+    </div>
+
+    <button
+        id="sendLetter"
+        class="storyButton">
+
+        書き終わった。手紙を届けよう
+
+    </button>
+
+</div>
+
+<div id="savedLetterScene">
+
+    <div id="savedLetterPaper">
+
+        <div id="savedLetterText"></div>
+
+        <div id="replyMessage"></div>
+
+    </div>
+
+</div>
+
+<div id="choiceBox">
+
+    <button id="burnButton">
+        燃やす
+    </button>
+
+    <button id="keepButton">
+        残す
+    </button>
+
+</div>
+
+<div id="finalScene">
+
+    <div id="finalTitle">
+        またねの約束。
+    </div>
+
+    <button
+        id="shareButton"
+        type="button"
+    >
+        Xでシェアする
+    </button>
+
+    <button
+        id="creditButton"
+        type="button"
+    >
+        Credit
+    </button>
+
+    <div
+        id="secretHotspot"
+        aria-label="隠された場所"
+    ></div>
+
+</div>
+
+<div id="creditScene">
+
+    <div id="creditCard">
+
+        <h2>Credit</h2>
+
+        <div id="creditText">
+
+            <p>
+                制作<br>
+                またねの約束。
+            </p>
+
+            <p>
+                シナリオ・プログラム・立ち絵・ギャラリー画像<br>
+                iroha_2302
+            </p>
+
+            <p>
+                背景画像<br>
+                ゲームまてりあるず様・イラストAC様
+            </p>
+
+            <p>
+                BGM・効果音<br>
+                魔王魂様・効果音ラボ様
+            </p>
+
+            <p>
+                使用フォント<br>
+                Zen Old Mincho<br>
+                Kaisei Decol
+            </p>
+
+        </div>
+
+        <button
+            id="creditClose"
+            type="button"
+        >
+            閉じる
+        </button>
+
+    </div>
+
+</div>
+
+<button id="creditButton">
+    Credit
+</button>
+
+
+<!-- 春陽の日記 -->
+<div id="diaryScene">
+
+    <h2 id="diaryTitle">
+        春陽の日記
+    </h2>
+
+    <div id="diaryPage">
+
+        <div id="diaryCover">
+            春陽の日記
+        </div>
+
+        <img
+            id="diaryImage"
+            src=""
+            alt="春陽の日記"
+        >
+
+    </div>
+
+    <!-- diaryPageの外側に置く -->
+    <div id="passwordArea">
+
+        <div id="passwordGlow"></div>
+
+        <input
+            id="passwordInput"
+            type="text"
+            placeholder="秘密の合言葉"
+            autocomplete="off"
+        >
+
+        <button
+            id="passwordButton"
+            type="button"
+        >
+            開く
+        </button>
+
+        <div id="passwordMessage"></div>
+
+    </div>
+
+    <div id="diaryGuide">
+        クリックで次のページへ
+    </div>
+
+    <button
+        id="diaryBackButton"
+        type="button"
+    >
+        戻る
+    </button>
+
+</div>
+
+
+
+<div id="drawerScene">
+
+    <h2 id="drawerTitle">
+        春陽の引き出し
+    </h2>
+
+    <div id="galleryGrid">
+
+        <button
+            class="galleryItem"
+            data-image="assets/images/gallery1.png"
+            type="button"
+        >
+            あの日撮ったチェキ
+        </button>
+
+        <button
+            class="galleryItem"
+            data-image="assets/images/gallery2.png"
+            type="button"
+        >
+            破り捨てられていた紙片
+        </button>
+
+        <button
+            class="galleryItem"
+            data-image="assets/images/gallery3.png"
+            type="button"
+        >
+            ある冬の日のニュース
+        </button>
+
+    </div>
+
+    <button
+        id="drawerBackButton"
+        type="button"
+    >
+        戻る
+    </button>
+
+</div>
+
+<div id="galleryModal">
+
+    <img
+        id="galleryLargeImage"
+        src=""
+        alt="春陽の引き出し"
+    >
+
+</div>
+
+<video
+    id="fireVideo"
+    src="assets/video/fire.mp4"
+    muted
+    playsinline
+    preload="auto">
+</video>
+
+<audio
+    id="fireSound"
+    src="assets/audio/fire.mp3"
+    preload="auto">
+</audio>
+
+<audio
+id="bgm"
+src="assets/audio/bgm.mp3"
+loop>
+</audio>
+
+<audio
+id="bgm2"
+src="assets/audio/bgm2.mp3"
+loop>
+</audio>
+
+<script src="script.js"></script>
+
+</body>
+
+</html>
