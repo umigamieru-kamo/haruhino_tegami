@@ -1530,7 +1530,7 @@ function showEndingPortrait() {
 
         // 文字は位置を動かさず、そのまま表示
         fadeText.textContent =
-            "約束だよ。　　　　　　　　　ひとりはやだ。";
+            "約束だよ。";
 
         fadeText.style.opacity = "0";
 
