@@ -1712,7 +1712,10 @@ function renderDiaryPage() {
 if (diaryPageIndex === 3) {
 
     diaryGuide.style.display = "none";
+
+    // 日記の戻るボタンを表示
     diaryBackButton.style.display = "flex";
+    diaryBackButton.style.pointerEvents = "auto";
 
     passwordArea.style.display = "flex";
     passwordArea.style.visibility = "visible";
@@ -1721,7 +1724,6 @@ if (diaryPageIndex === 3) {
     passwordInput.value = "";
     passwordMessage.textContent = "";
 
-    // 入力欄が画面外なら自動で見える位置へ移動
     setTimeout(() => {
 
         passwordArea.scrollIntoView({
@@ -1988,8 +1990,14 @@ function openDrawer() {
     scene = "drawer";
 
     diaryScene.style.display = "none";
+    diaryScene.style.pointerEvents = "none";
 
     drawerScene.style.display = "flex";
+    drawerScene.style.pointerEvents = "auto";
+
+    // 引き出しの戻る
+    drawerBackButton.style.display = "flex";
+    drawerBackButton.style.pointerEvents = "auto";
 
 }
 
@@ -1997,13 +2005,17 @@ drawerBackButton.addEventListener(
     "click",
     (event) => {
 
+        event.preventDefault();
         event.stopPropagation();
 
         scene = "diary";
 
         drawerScene.style.display = "none";
+        drawerScene.style.pointerEvents = "none";
 
         diaryScene.style.display = "flex";
+        diaryScene.style.opacity = "1";
+        diaryScene.style.pointerEvents = "auto";
 
         diaryPageIndex = 3;
 
