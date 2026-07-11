@@ -193,6 +193,41 @@ function safePlay(audio) {
 
 }
 
+// =========================
+// BGM3を再生
+// =========================
+
+function playBgm3() {
+
+    if (!bgm3) {
+        return;
+    }
+
+    bgm3.volume = 0.45;
+
+    if (bgm3.paused) {
+
+        const playResult =
+            bgm3.play();
+
+        if (
+            playResult !== undefined
+        ) {
+
+            playResult.catch(() => {
+
+                console.log(
+                    "BGM3は次の操作時に再生します。"
+                );
+
+            });
+
+        }
+
+    }
+
+}
+
 function setMessages(newMessages, newScene) {
 
     // 前のタイプライター処理を停止
@@ -1773,10 +1808,11 @@ function showFinalScene(immediate = false) {
     bgm2.currentTime = 0;
 
     // BGM3を開始
-    bgm3.pause();
-    bgm3.currentTime = 0;
-    bgm3.volume = 0.45;
-    safePlay(bgm3);
+bgm3.pause();
+bgm3.currentTime = 0;
+bgm3.volume = 0.45;
+
+playBgm3();
 
     // ほかの画面を隠す
     title.style.display = "none";
@@ -1837,11 +1873,11 @@ if (creditButton) {
 
     }, delay);
 
-    setTimeout(() => {
+setTimeout(() => {
 
-        scene = "finalScene";
+    scene = "finalScene";
 
-    }, delay + 1900);
+}, immediate ? 0 : delay + 1900);
 
 }
 
@@ -1900,10 +1936,10 @@ window.addEventListener(
 
         if (finished === "true") {
 
-            // 初期タイトル画面を先に消す
+            // 最初のタイトル画面を隠す
             ui.style.display = "none";
 
-            // FinalSceneを直接表示
+            // エンディング画面へ直接移動
             showFinalScene(true);
 
         } else {
@@ -1913,35 +1949,12 @@ window.addEventListener(
 
         }
 
-        // 表示する画面が決まってから全体を見せる
         document.body.classList.remove(
             "loading"
         );
 
         document.body.classList.add(
             "ready"
-        );
-
-        // 自動再生が止められた場合のBGM3再開
-        document.addEventListener(
-            "click",
-            () => {
-
-                if (
-                    scene === "finalScene" &&
-                    bgm3.paused
-                ) {
-
-                    bgm3.volume = 0.45;
-
-                    safePlay(bgm3);
-
-                }
-
-            },
-            {
-                once: true
-            }
         );
 
     }
@@ -2208,3 +2221,23 @@ if (
     );
 
 }
+
+// =========================
+// 自動再生が止められた場合のBGM3再開
+// =========================
+
+document.addEventListener(
+    "pointerdown",
+    () => {
+
+        if (
+            scene === "finalScene" ||
+            scene === "finalTransition"
+        ) {
+
+            playBgm3();
+
+        }
+
+    }
+);
