@@ -1057,7 +1057,9 @@ function showSavedLetter() {
     if (
 
         savedLetter.includes("愛してる") ||
-        savedLetter.includes("あいしてる")
+        savedLetter.includes("愛している") ||
+        savedLetter.includes("あいしてる") ||
+        savedLetter.includes("あいしている")
 
     ) {
 
