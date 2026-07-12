@@ -30,6 +30,24 @@ const nextMark = document.getElementById("nextMark");
 const fadeScreen = document.getElementById("fadeScreen");
 const fadeText = document.getElementById("fadeText");
 const background = document.getElementById("background");
+const transitionImages =
+    document.getElementById(
+        "transitionImages"
+    );
+
+const transitionImageA =
+    document.getElementById(
+        "transitionImageA"
+    );
+
+const transitionImageB =
+    document.getElementById(
+        "transitionImageB"
+    );
+const transitionNoise =
+    document.getElementById(
+        "transitionNoise"
+    );
 
 const hotspot1 = document.getElementById("hotspot1");
 const object1 = document.getElementById("object1");
@@ -130,6 +148,16 @@ document.getElementById("creditScene");
 const creditClose =
 document.getElementById("creditClose");
 
+const flashVideo =
+    document.getElementById(
+        "flashVideo"
+    );
+
+const flashSound =
+    document.getElementById(
+        "flashSound"
+    );
+
 
 
 
@@ -193,6 +221,189 @@ function safePlay(audio) {
 
 }
 
+function wait(ms) {
+
+    return new Promise((resolve) => {
+
+        setTimeout(resolve, ms);
+
+    });
+
+}
+
+// =========================
+// bg1→bg2直前の短い映像
+// =========================
+
+async function playFlashEffect() {
+
+    if (!flashVideo || !flashSound) {
+
+        console.error(
+            "flashVideo または flashSound が見つかりません。"
+        );
+
+        return;
+    }
+
+    // 0.3秒
+    const FLASH_DURATION = 500;
+
+    flashVideo.pause();
+    flashSound.pause();
+
+    flashVideo.currentTime = 0;
+    flashSound.currentTime = 0;
+
+    flashVideo.style.display = "block";
+    flashVideo.style.opacity = "1";
+
+    flashSound.volume = 0.7;
+
+    try {
+
+        await flashVideo.play();
+
+    } catch (error) {
+
+        console.warn(
+            "flashVideoを再生できませんでした。",
+            error
+        );
+
+    }
+
+    safePlay(flashSound);
+
+    await wait(FLASH_DURATION);
+
+    flashVideo.pause();
+    flashSound.pause();
+
+    flashVideo.currentTime = 0;
+    flashSound.currentTime = 0;
+
+    flashVideo.style.display = "none";
+    flashVideo.style.opacity = "1";
+
+}
+
+// =========================
+// 演出画像の先読み
+// =========================
+
+function preloadImage(src) {
+
+    return new Promise((resolve) => {
+
+        const image = new Image();
+
+        image.onload = resolve;
+        image.onerror = resolve;
+
+        image.src = src;
+
+    });
+
+}
+
+// =========================
+// bg2 → bg3 → ノイズだけフェード
+// =========================
+
+async function playBackgroundTransition() {
+
+    const bg2 =
+        "assets/bg/bg2.jpg";
+
+    const bg3 =
+        "assets/bg/bg3.jpg";
+
+    // 画像を先に読み込む
+    await Promise.all([
+        preloadImage(bg2),
+        preloadImage(bg3)
+    ]);
+
+    // 演出レイヤーを表示
+    transitionImages.style.display =
+        "block";
+
+    transitionImages.style.background =
+        "#000";
+    
+    // 最初は黒画面だけを見せる
+transitionImageA.style.opacity = "0";
+transitionImageB.style.opacity = "0";
+
+await wait(250);
+
+    // ノイズを表示
+    transitionImages.classList.add(
+        "noisy"
+    );
+
+    transitionImageA.style.backgroundImage =
+        `url("${bg2}")`;
+
+    transitionImageB.style.backgroundImage =
+        `url("${bg3}")`;
+
+    transitionImageA.style.opacity = "0";
+    transitionImageB.style.opacity = "0";
+
+    // bg2を表示
+    requestAnimationFrame(() => {
+
+        requestAnimationFrame(() => {
+
+            transitionImageA.style.opacity =
+                "1";
+
+        });
+
+    });
+
+    // bg2の表示時間
+    await wait(780);
+
+    // bg2からbg3へ切り替え
+    transitionImageA.style.opacity = "0";
+    transitionImageB.style.opacity = "1";
+
+    // bg3の表示時間
+    await wait(780);
+
+    // bg3だけ消す
+    transitionImageB.style.opacity = "0";
+
+    // 画像のフェード完了を待つ
+    await wait(400);
+
+    /*
+       ここでは黒背景とノイズだけが残る
+    */
+
+    // noisyクラスを外して
+    // ノイズだけフェードアウト
+    transitionImages.classList.remove(
+        "noisy"
+    );
+
+    // CSSの0.7秒フェードを待つ
+    await wait(750);
+
+    // 演出レイヤーを完全に消す
+    transitionImages.style.display =
+        "none";
+
+    transitionImages.style.background =
+        "transparent";
+
+    transitionImageA.style.opacity = "0";
+    transitionImageB.style.opacity = "0";
+
+}
 // =========================
 // BGM3を再生
 // =========================
@@ -1039,14 +1250,14 @@ function fitLetterText() {
 }
 
 // =========================
-// 暗転・音声演出
+// 最初の暗転・背景②③・音声演出
 // =========================
 
-function startTransition() {
+async function startTransition() {
 
     scene = "transition";
 
-    // BGMを一時停止
+    // BGM1を停止
     bgm.pause();
     bgm.currentTime = 0;
 
@@ -1054,66 +1265,74 @@ function startTransition() {
     messageBox.style.display = "none";
 
     hotspot1.style.display = "none";
-
     object1.style.display = "none";
 
     savedLetterScene.style.display = "none";
-
     savedLetterScene.style.opacity = "0";
-
     savedLetterScene.style.pointerEvents = "none";
 
-    // 暗転開始
+    fadeText.style.opacity = "0";
+    fadeText.textContent = "";
+
+    // flash動画を見せるため、暗転をいったん隠す
+    fadeScreen.style.opacity = "0";
+    fadeScreen.style.pointerEvents = "none";
+
+    // bg1が残った状態で短い動画と音を再生
+    await playFlashEffect();
+
+    // 動画終了後、黒画面を準備
+    transitionImages.style.display = "block";
+    transitionImages.style.background = "#000";
+
+    transitionImages.classList.remove(
+        "noisy"
+    );
+
+    transitionImageA.style.opacity = "0";
+    transitionImageB.style.opacity = "0";
+
+    // 黒画面を表示してからbg1を消す
+    background.style.backgroundImage = "none";
+
+    // fadeScreenは後の文字表示用に戻す
+    fadeScreen.style.background = "transparent";
     fadeScreen.style.opacity = "1";
+    fadeScreen.style.pointerEvents = "auto";
 
-    // 背景画像②
-    setTimeout(() => {
+    // bg2 → bg3
+    await playBackgroundTransition();
 
-        background.style.backgroundImage =
-            'url("assets/bg/bg2.jpg")';
+    // ここから完全暗転
+    fadeScreen.style.background = "#000";
 
-    }, 1500);
+    // 以下は今の音声処理をそのまま続ける
 
-    // 背景画像③
-    setTimeout(() => {
+    // 音声を初期化
+    voice1.pause();
+    voice2.pause();
 
-        background.style.backgroundImage =
-            'url("assets/bg/bg3.jpg")';
+    voice1.currentTime = 0;
+    voice2.currentTime = 0;
 
-    }, 1600);
+    voice1.volume = 0.5;
+    voice2.volume = 0.4;
 
-    // 黒背景
-    setTimeout(() => {
+    // 二つの音声を再生
+    safePlay(voice1);
+    safePlay(voice2);
 
-        background.style.backgroundImage =
-            "none";
+    fadeAudio(
+        voice1,
+        3200
+    );
 
-    }, 1700);
+    fadeAudio(
+        voice2,
+        3200
+    );
 
-    // 2つの音声を再生
-    setTimeout(() => {
-
-        voice1.volume = 0.5;
-
-        voice2.volume = 0.4;
-
-        safePlay(voice1);
-
-        safePlay(voice2);
-
-        fadeAudio(
-            voice1,
-            3200
-        );
-
-        fadeAudio(
-            voice2,
-            3200
-        );
-
-    }, 1800);
-
-    // 暗転中の白文字
+    // 暗転中の文字
     setTimeout(() => {
 
         fadeText.textContent =
@@ -1121,52 +1340,71 @@ function startTransition() {
 
         fadeText.style.opacity = "1";
 
-    }, 1500);
+    }, 200);
 
-        setTimeout(() => {
+    setTimeout(() => {
+
+        fadeText.style.opacity = "0";
+
+    }, 700);
+
+    setTimeout(() => {
 
         fadeText.textContent =
             "忘れられないことがある";
 
         fadeText.style.opacity = "1";
 
-    }, 2000);
+    }, 900);
 
-        setTimeout(() => {
+    setTimeout(() => {
+
+        fadeText.style.opacity = "0";
+
+    }, 1400);
+
+    setTimeout(() => {
 
         fadeText.textContent =
             "あの海には……";
 
         fadeText.style.opacity = "1";
 
-    }, 2500);
+    }, 1600);
 
-            setTimeout(() => {
+    setTimeout(() => {
+
+        fadeText.style.opacity = "0";
+
+    }, 2100);
+
+    setTimeout(() => {
 
         fadeText.textContent =
             "あのとき、自分は\nどう言えばよかったんだろう";
 
         fadeText.style.opacity = "1";
 
-    }, 3000);
+    }, 2300);
 
-    // 白文字を消す
     setTimeout(() => {
 
         fadeText.style.opacity = "0";
 
-    }, 3500);
+    }, 3800);
 
-    // 5秒後にクリック待ちへ
+    // クリック待ち
     setTimeout(() => {
 
         fadeText.textContent = "";
 
         showContinueMessage();
 
-    }, 5000);
+    }, 4500);
 
 }
+
+
 
 // =========================
 // 音声を徐々に小さくする
@@ -1269,6 +1507,19 @@ function nextScene() {
     savedLetterScene.style.opacity =
         "0";
 
+    fadeScreen.style.background = "#000";
+fadeScreen.style.pointerEvents = "none";
+
+transitionImages.classList.remove(
+    "noisy"
+);
+
+
+transitionImages.style.display = "none";
+
+transitionImageA.style.opacity = "0";
+transitionImageB.style.opacity = "0";
+
     savedLetterScene.style.pointerEvents =
         "none";
 
@@ -1343,7 +1594,7 @@ function burnLetter(event) {
                 filter: "brightness(1)"
             },
             {
-                opacity: 0.7,
+                opacity: 0.5,
                 filter: "brightness(0.6)"
             },
             {
@@ -1853,6 +2104,8 @@ playBgm3();
 
         endingPortrait.style.display = "none";
         fadeText.textContent = "";
+
+        fadeScreen.classList.remove("darkNoise");
 
         fadeScreen.style.opacity = "0";
         fadeScreen.style.pointerEvents = "none";
