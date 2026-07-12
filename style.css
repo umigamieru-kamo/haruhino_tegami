@@ -1961,6 +1961,8 @@ body.ready {
 }
 
 
+/* 日記の戻るボタンは、
+   JavaScriptが最後のページでflexにする */
 #diaryBackButton {
     display: none;
 
@@ -2115,10 +2117,9 @@ body.ready {
     height: 100dvh;
 
     overflow: hidden;
-
     pointer-events: none;
 
-    z-index: 480;
+    z-index: 550;
 
     transform: translateZ(0);
     backface-visibility: hidden;
@@ -2384,4 +2385,25 @@ body.ready {
     z-index: 550;
 
     background: #000;
+}
+
+/* スマホ版 bg2・bg3の見え方を調整 */
+@media (max-width: 768px) {
+
+    #transitionImages::after {
+        background:
+            linear-gradient(
+                rgba(0, 0, 0, 0.24),
+                rgba(0, 0, 0, 0.42)
+            );
+    }
+
+    #transitionImages.noisy .transitionImageLayer {
+        filter:
+            sepia(.65)
+            saturate(.85)
+            contrast(1.35)
+            brightness(.92);
+    }
+
 }
