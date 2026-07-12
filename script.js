@@ -380,11 +380,6 @@ await wait(250);
     // 画像のフェード完了を待つ
     await wait(400);
 
-    /*
-       ここでは黒背景とノイズだけが残る
-    */
-
-    // noisyクラスを外して
     // ノイズだけフェードアウト
     transitionImages.classList.remove(
         "noisy"
@@ -1303,10 +1298,8 @@ async function startTransition() {
     // bg2 → bg3
     await playBackgroundTransition();
 
-    // ここから完全暗転
+    // 暗転
     fadeScreen.style.background = "#000";
-
-    // 以下は今の音声処理をそのまま続ける
 
     // 音声を初期化
     voice1.pause();
@@ -1366,7 +1359,7 @@ async function startTransition() {
     setTimeout(() => {
 
         fadeText.textContent =
-            "あの海には……";
+            "約束……";
 
         fadeText.style.opacity = "1";
 
