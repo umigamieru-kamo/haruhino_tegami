@@ -1961,8 +1961,6 @@ body.ready {
 }
 
 
-/* 日記の戻るボタンは、
-   JavaScriptが最後のページでflexにする */
 #diaryBackButton {
     display: none;
 
@@ -2100,4 +2098,290 @@ body.ready {
         height:100dvh;
     }
 
+}
+
+/* =========================
+   暗転中の背景画像
+========================= */
+
+#transitionImages {
+    display: none;
+
+    position: fixed;
+    inset: 0;
+
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+
+    overflow: hidden;
+
+    pointer-events: none;
+
+    z-index: 480;
+
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+.transitionImageLayer {
+    position: absolute;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    opacity: 0;
+
+    transform:
+        translateZ(0)
+        scale(1.01);
+
+    backface-visibility: hidden;
+
+    transition: opacity 0.38s ease;
+}
+
+/* 画像の上に暗いフィルター */
+#transitionImages::after {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            rgba(0, 0, 0, 0.48),
+            rgba(0, 0, 0, 0.68)
+        );
+
+    pointer-events: none;
+
+    z-index: 10;
+}
+
+/* =========================
+   暗転中の強いノイズ
+========================= */
+
+#transitionNoise {
+    position: absolute;
+    inset: 0;
+
+    pointer-events: none;
+
+    z-index: 20;
+
+    opacity: 0;
+
+    mix-blend-mode: screen;
+
+    background-image:
+        repeating-radial-gradient(
+            circle at 20% 30%,
+            rgba(255, 255, 255, 0.5) 0 1px,
+            rgba(0, 0, 0, 0.45) 1px 2px,
+            transparent 2px 5px
+        ),
+        repeating-linear-gradient(
+            0deg,
+            rgba(255, 255, 255, 0.16) 0 1px,
+            transparent 1px 5px
+        );
+
+    background-size:
+        8px 8px,
+        100% 6px;
+
+    filter:
+        contrast(1.7)
+        brightness(1.1);
+
+    transition: opacity 0.7s ease;
+
+    animation:
+        transitionNoiseMove 0.11s steps(2) infinite;
+}
+
+#transitionImages.noisy #transitionNoise {
+    opacity: 0.42;
+}
+
+/* 画像そのものをセピア・高コントラストにする */
+#transitionImages.noisy .transitionImageLayer {
+    filter:
+        sepia(.95)
+        saturate(.75)
+        contrast(1.7)
+        brightness(.72);
+}
+
+@keyframes transitionNoiseMove {
+
+    0% {
+        transform: translate(0, 0) scale(1.02);
+        background-position:
+            0 0,
+            0 0;
+    }
+
+    25% {
+        transform: translate(-2px, 1px) scale(1.03);
+        background-position:
+            3px -2px,
+            0 2px;
+    }
+
+    50% {
+        transform: translate(2px, -1px) scale(1.02);
+        background-position:
+            -4px 3px,
+            0 -1px;
+    }
+
+    75% {
+        transform: translate(-1px, -2px) scale(1.03);
+        background-position:
+            2px 4px,
+            0 3px;
+    }
+
+    100% {
+        transform: translate(0, 0) scale(1.02);
+        background-position:
+            0 0,
+            0 0;
+    }
+
+}
+
+@keyframes transitionNoiseFlash {
+
+    0%,
+    100% {
+        opacity: .55;
+    }
+
+    50% {
+        opacity: .95;
+    }
+
+}
+
+/* =========================
+   完全暗転中のノイズ
+========================= */
+
+#darkNoiseLayer {
+    display: none;
+
+    position: absolute;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    pointer-events: none;
+
+    opacity: 0;
+
+    z-index: 10;
+
+    background-image:
+        repeating-radial-gradient(
+            circle,
+            rgba(255, 255, 255, 0.3) 0 1px,
+            transparent 1px 4px
+        ),
+        repeating-linear-gradient(
+            0deg,
+            rgba(255, 255, 255, 0.1) 0 1px,
+            transparent 1px 5px
+        );
+
+    background-size:
+        7px 7px,
+        100% 6px;
+
+    mix-blend-mode: screen;
+
+    filter:
+        contrast(1.4)
+        brightness(1.15);
+
+    animation:
+        darkNoiseMove 0.12s steps(2) infinite;
+}
+
+#darkNoiseLayer.visible {
+    display: block;
+    opacity: 0.16;
+}
+
+@keyframes darkNoiseMove {
+
+    0% {
+        transform: translate(0, 0);
+        background-position:
+            0 0,
+            0 0;
+    }
+
+    25% {
+        transform: translate(-1px, 1px);
+        background-position:
+            2px -1px,
+            0 1px;
+    }
+
+    50% {
+        transform: translate(1px, -1px);
+        background-position:
+            -2px 2px,
+            0 -1px;
+    }
+
+    75% {
+        transform: translate(-1px, -1px);
+        background-position:
+            1px 2px,
+            0 2px;
+    }
+
+    100% {
+        transform: translate(0, 0);
+        background-position:
+            0 0,
+            0 0;
+    }
+
+}
+
+/* =========================
+   bg1→bg2直前の短い動画
+========================= */
+
+#flashVideo {
+    display: none;
+
+    position: fixed;
+    inset: 0;
+
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+
+    object-fit: cover;
+
+    opacity: 1;
+
+    pointer-events: none;
+
+    z-index: 550;
+
+    background: #000;
 }
