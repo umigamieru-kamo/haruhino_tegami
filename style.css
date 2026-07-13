@@ -23,6 +23,7 @@ body {
     height:100vh;
     height:100dvh;
 
+    background-color:#000;
     background-image:url("assets/bg/bg1.jpg");
     background-size:cover;
     background-position:center;
@@ -33,6 +34,18 @@ body {
     will-change:transform;
 
     z-index:-1;
+}
+
+/* クリア済みの場合は、最初の描画からエンディング背景を使う。 */
+html.finished #background {
+    background-image: url("assets/bg/bg5.jpg");
+}
+
+/* JSが最終画面を準備するまで黒幕を表示し、bg1の露出を防ぐ。 */
+html.finished #fadeScreen {
+    opacity: 1;
+    background: #000;
+    pointer-events: auto;
 }
 
 /* =========================
@@ -2406,4 +2419,14 @@ body.ready {
             brightness(.92);
     }
 
+}
+
+/* =========================
+   エンディング切替の安定化
+   最終UIより暗転レイヤーを前面に置き、
+   黒幕だけを一度フェードさせる。
+========================= */
+#fadeScreen.endingCover {
+    z-index: 2000;
+    transition: opacity 1s ease;
 }
