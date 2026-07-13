@@ -2048,8 +2048,6 @@ if (diaryPageIndex === 3) {
 
 function showFinalScene(immediate = false) {
 
-    // 通常進行では立ち絵終了後だけ実行
-    // 次回アクセス時は immediate=true で直接開く
     if (
         !immediate &&
         scene !== "endingPortraitWait"
@@ -2059,7 +2057,6 @@ function showFinalScene(immediate = false) {
 
     scene = "finalTransition";
 
-    // クリア情報を保存
     localStorage.setItem(
         "mataneFinished",
         "true"
@@ -2072,21 +2069,26 @@ function showFinalScene(immediate = false) {
     bgm2.pause();
     bgm2.currentTime = 0;
 
-    // BGM3を開始
-bgm3.pause();
-bgm3.currentTime = 0;
-bgm3.volume = 0.45;
+    // BGM3
+    bgm3.pause();
+    bgm3.currentTime = 0;
+    bgm3.volume = 0.45;
 
-playBgm3();
+    playBgm3();
 
-    // ほかの画面を隠す
+    // 他の画面を隠す
+    ui.style.display = "none";
+
     title.style.display = "none";
     startButton.style.display = "none";
+
     messageBox.style.display = "none";
     letterScene.style.display = "none";
     savedLetterScene.style.display = "none";
     choiceBox.style.display = "none";
     diaryScene.style.display = "none";
+    drawerScene.style.display = "none";
+    galleryModal.style.display = "none";
 
     hotspot1.style.display = "none";
     hotspot2.style.display = "none";
@@ -2096,55 +2098,124 @@ playBgm3();
     object2.style.display = "none";
 
     fireVideo.style.display = "none";
+    flashVideo.style.display = "none";
+    transitionImages.style.display = "none";
 
     fadeText.style.opacity = "0";
     endingPortrait.style.opacity = "0";
 
-    const delay = immediate ? 0 : 1500;
-
-    setTimeout(() => {
+    /*
+       再アクセス時は、
+       setTimeoutやフェードを挟まず
+       描画前に完成状態へする
+    */
+    if (immediate) {
 
         endingPortrait.style.display = "none";
         fadeText.textContent = "";
-
-        fadeScreen.classList.remove("darkNoise");
-
-        fadeScreen.style.opacity = "0";
-        fadeScreen.style.pointerEvents = "none";
 
         background.style.backgroundImage =
             'url("assets/bg/bg5.jpg")';
 
         background.style.opacity = "1";
 
-finalScene.style.display = "flex";
-finalScene.style.opacity = "0";
-finalScene.style.pointerEvents = "auto";
+        fadeScreen.style.opacity = "0";
+        fadeScreen.style.pointerEvents = "none";
 
-if (creditButton) {
-    creditButton.style.display = "flex";
-    creditButton.style.pointerEvents = "auto";
-}
+        finalScene.style.display = "flex";
+        finalScene.style.opacity = "1";
+        finalScene.style.pointerEvents = "auto";
+
+        shareButton.style.display = "flex";
+        shareButton.style.pointerEvents = "auto";
+
+        creditButton.style.display = "flex";
+        creditButton.style.pointerEvents = "auto";
 
         secretHotspot.style.display = "block";
+        secretHotspot.style.pointerEvents = "auto";
 
-        requestAnimationFrame(() => {
+        scene = "finalScene";
+
+        return;
+    }
+
+    /*
+       通常エンディングでは
+       黒画面を維持したままbg5を準備
+    */
+    fadeScreen.style.background = "#000";
+    fadeScreen.style.opacity = "1";
+    fadeScreen.style.pointerEvents = "auto";
+
+    const bg5Loader = new Image();
+
+    bg5Loader.onload = () => {
+
+        setTimeout(() => {
+
+            endingPortrait.style.display = "none";
+            fadeText.textContent = "";
+
+            background.style.backgroundImage =
+                'url("assets/bg/bg5.jpg")';
+
+            background.style.opacity = "1";
+
+            finalScene.style.display = "flex";
+            finalScene.style.opacity = "0";
+            finalScene.style.pointerEvents = "auto";
+
+            shareButton.style.display = "flex";
+            shareButton.style.pointerEvents = "auto";
+
+            creditButton.style.display = "flex";
+            creditButton.style.pointerEvents = "auto";
+
+            secretHotspot.style.display = "block";
+            secretHotspot.style.pointerEvents = "auto";
 
             requestAnimationFrame(() => {
 
-                finalScene.style.opacity = "1";
+                requestAnimationFrame(() => {
+
+                    fadeScreen.style.opacity = "0";
+                    fadeScreen.style.pointerEvents = "none";
+
+                    finalScene.style.opacity = "1";
+
+                });
 
             });
 
-        });
+            scene = "finalScene";
 
-    }, delay);
+        }, 500);
 
-setTimeout(() => {
+    };
 
-    scene = "finalScene";
+    bg5Loader.onerror = () => {
 
-}, immediate ? 0 : delay + 1900);
+        // 読み込み失敗でも画面を止めない
+        background.style.backgroundImage =
+            'url("assets/bg/bg5.jpg")';
+
+        finalScene.style.display = "flex";
+        finalScene.style.opacity = "1";
+        finalScene.style.pointerEvents = "auto";
+
+        creditButton.style.display = "flex";
+        secretHotspot.style.display = "block";
+
+        fadeScreen.style.opacity = "0";
+        fadeScreen.style.pointerEvents = "none";
+
+        scene = "finalScene";
+
+    };
+
+    bg5Loader.src =
+        "assets/bg/bg5.jpg";
 
 }
 
@@ -2192,8 +2263,8 @@ diaryBackButton.addEventListener(
 // ページ読み込み時の初期表示
 // =========================
 
-window.addEventListener(
-    "load",
+document.addEventListener(
+    "DOMContentLoaded",
     () => {
 
         const finished =
@@ -2203,29 +2274,32 @@ window.addEventListener(
 
         if (finished === "true") {
 
-            // 最初のタイトル画面を隠す
-            ui.style.display = "none";
-
-            // エンディング画面へ直接移動
+            // bodyを表示する前に
+            // FinalSceneを完成状態へする
             showFinalScene(true);
 
         } else {
 
-            // 初回はタイトル画面を表示
             ui.style.display = "flex";
 
         }
 
-        document.body.classList.remove(
-            "loading"
-        );
+        requestAnimationFrame(() => {
 
-        document.body.classList.add(
-            "ready"
-        );
+            document.body.classList.remove(
+                "loading"
+            );
+
+            document.body.classList.add(
+                "ready"
+            );
+
+        });
 
     }
 );
+
+
 // =========================
 // 春陽の引き出し
 // =========================
