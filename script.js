@@ -298,8 +298,32 @@ function preloadImage(src) {
 
         const image = new Image();
 
-        image.onload = resolve;
-        image.onerror = resolve;
+        image.onload = async () => {
+
+            try {
+
+                // load完了だけでなく、ブラウザの画像デコード完了も待つ。
+                if (typeof image.decode === "function") {
+                    await image.decode();
+                }
+
+            } catch (error) {
+
+                // decode非対応・失敗時も、読み込み済み画像はそのまま使用する。
+                console.warn("画像のデコードを完了できませんでした。", src, error);
+
+            }
+
+            resolve();
+
+        };
+
+        image.onerror = () => {
+
+            console.warn("画像を読み込めませんでした。", src);
+            resolve();
+
+        };
 
         image.src = src;
 
@@ -2114,7 +2138,8 @@ async function showFinalScene(immediate = false) {
     const finalBackground = "assets/bg/bg5.jpg";
     const delay = immediate ? 0 : 1500;
 
-    // immediate時も黒画面を維持して、白いフレームを出さない。
+    // 黒画面を最前面に置く。最終UIとの二重フェードを防ぐ。
+    fadeScreen.classList.add("endingCover");
     fadeScreen.style.background = "#000";
     fadeScreen.style.opacity = "1";
     fadeScreen.style.pointerEvents = "auto";
@@ -2128,14 +2153,16 @@ async function showFinalScene(immediate = false) {
     fadeText.textContent = "";
     fadeScreen.classList.remove("darkNoise");
 
-    // 暗転の裏側で背景と最終UIを準備する。
+    // 暗転の裏側で背景と最終UIを完成状態にする。
     background.style.display = "block";
     background.style.opacity = "1";
     background.style.backgroundImage =
         `url("${finalBackground}")`;
 
+    // finalScene自身はフェードさせない。暗転レイヤーだけを1回フェードする。
+    finalScene.style.transition = "none";
     finalScene.style.display = "flex";
-    finalScene.style.opacity = "0";
+    finalScene.style.opacity = "1";
     finalScene.style.pointerEvents = "auto";
 
     if (shareButton) {
@@ -2153,17 +2180,16 @@ async function showFinalScene(immediate = false) {
         secretHotspot.style.pointerEvents = "auto";
     }
 
-    // background-imageの変更を最低2フレーム描画させてから暗転解除。
+    // 背景とUIの完成状態を描画してから、黒幕だけを外す。
     await nextPaint();
 
     fadeScreen.style.opacity = "0";
     fadeScreen.style.pointerEvents = "none";
 
-    finalScene.style.opacity = "1";
+    await wait(immediate ? 1050 : 1100);
 
-    if (!immediate) {
-        await wait(1900);
-    }
+    fadeScreen.classList.remove("endingCover");
+    finalScene.style.transition = "";
 
     scene = "finalScene";
 
@@ -2244,6 +2270,9 @@ window.addEventListener(
         document.body.classList.add(
             "ready"
         );
+
+        // 初期描画用のクリア済みクラスは、最終画面の準備後も残して問題ない。
+        // 背景をCSS側でもbg5に固定し、再描画時のbg1露出を防ぐ。
 
     }
 );
