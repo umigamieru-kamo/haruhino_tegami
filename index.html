@@ -5,6 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>またねの約束。</title>
 
+    <!-- スマホの初期描画で白やbg1を見せないための最小CSS -->
+    <style>
+        html, body {
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+        }
+
+        #bootCover {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: #000;
+            opacity: 1;
+            pointer-events: auto;
+            z-index: 2147483647;
+            transition: opacity .45s ease;
+        }
+
+        html.finished #bootCover {
+            display: block;
+        }
+    </style>
+
     <script>
         try {
             if (localStorage.getItem("mataneFinished") === "true") {
@@ -24,6 +49,8 @@
 
 <body class="loading">
 
+<div id="bootCover" aria-hidden="true"></div>
+
 <audio id="voice1" src="assets/audio/voice1.mp3"></audio>
 <audio id="voice2" src="assets/audio/voice2.mp3"></audio>
 <audio id="bgm3" src="assets/audio/bgm3.mp3" loop></audio>
@@ -35,6 +62,7 @@
 </div>
 
 <div id="background"></div>
+<div id="endingBackground"></div>
 
 <video id="flashVideo" src="assets/video/flash.mp4" muted playsinline preload="auto"></video>
 <audio id="flashSound" src="assets/audio/flash.mp3" preload="auto"></audio>
