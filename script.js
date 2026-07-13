@@ -2263,8 +2263,8 @@ diaryBackButton.addEventListener(
 // ページ読み込み時の初期表示
 // =========================
 
-document.addEventListener(
-    "DOMContentLoaded",
+window.addEventListener(
+    "load",
     () => {
 
         const finished =
@@ -2274,32 +2274,29 @@ document.addEventListener(
 
         if (finished === "true") {
 
-            // bodyを表示する前に
-            // FinalSceneを完成状態へする
+            // 最初のタイトル画面を隠す
+            ui.style.display = "none";
+
+            // エンディング画面へ直接移動
             showFinalScene(true);
 
         } else {
 
+            // 初回はタイトル画面を表示
             ui.style.display = "flex";
 
         }
 
-        requestAnimationFrame(() => {
+        document.body.classList.remove(
+            "loading"
+        );
 
-            document.body.classList.remove(
-                "loading"
-            );
-
-            document.body.classList.add(
-                "ready"
-            );
-
-        });
+        document.body.classList.add(
+            "ready"
+        );
 
     }
 );
-
-
 // =========================
 // 春陽の引き出し
 // =========================
