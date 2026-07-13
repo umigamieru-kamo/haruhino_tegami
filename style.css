@@ -4,11 +4,16 @@
     box-sizing:border-box;
 }
 
-html,body{
-    width:100%;
-    height:100%;
-    overflow:hidden;
-    font-family:sans-serif;
+html,
+body {
+    width: 100%;
+    height: 100%;
+
+    overflow: hidden;
+
+    background: #000;
+
+    font-family: sans-serif;
 }
 
 body {
@@ -1862,13 +1867,17 @@ body {
 }
 
 body.loading {
-    visibility: hidden;
+    opacity: 0;
+    background: #000;
 }
 
 body.ready {
-    visibility: visible;
+    opacity: 1;
 }
 
+body {
+    transition: opacity 0.18s ease;
+}
 
 /* =========================
    日記・引き出し画面戻るボタン
