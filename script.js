@@ -1779,12 +1779,11 @@ function startEndingSequence() {
     object1.style.display = "none";
     object2.style.display = "none";
 
-    // 黒背景にする
+    // 暗転レイヤーを確実に黒くして表示する。
+    // 下の背景画像は消さずに残し、描画の空白を防ぐ。
+    fadeScreen.style.background = "#000";
     fadeScreen.style.opacity = "1";
     fadeScreen.style.pointerEvents = "auto";
-
-    // 元の背景も消す
-    background.style.backgroundImage = "none";
 
     // 少し間を置いて文字を表示
     setTimeout(() => {
@@ -2046,10 +2045,24 @@ if (diaryPageIndex === 3) {
         "none";
 }
 
-function showFinalScene(immediate = false) {
+function nextPaint() {
 
-    // 通常進行では立ち絵終了後だけ実行
-    // 次回アクセス時は immediate=true で直接開く
+    return new Promise((resolve) => {
+
+        requestAnimationFrame(() => {
+
+            requestAnimationFrame(resolve);
+
+        });
+
+    });
+
+}
+
+async function showFinalScene(immediate = false) {
+
+    // 通常進行では立ち絵終了後だけ実行。
+    // クリア済みの再訪時は immediate=true で直接開く。
     if (
         !immediate &&
         scene !== "endingPortraitWait"
@@ -2059,25 +2072,21 @@ function showFinalScene(immediate = false) {
 
     scene = "finalTransition";
 
-    // クリア情報を保存
     localStorage.setItem(
         "mataneFinished",
         "true"
     );
 
-    // BGM1・BGM2を停止
     bgm.pause();
     bgm.currentTime = 0;
 
     bgm2.pause();
     bgm2.currentTime = 0;
 
-    // BGM3を開始
-bgm3.pause();
-bgm3.currentTime = 0;
-bgm3.volume = 0.45;
-
-playBgm3();
+    bgm3.pause();
+    bgm3.currentTime = 0;
+    bgm3.volume = 0.45;
+    playBgm3();
 
     // ほかの画面を隠す
     title.style.display = "none";
@@ -2087,6 +2096,8 @@ playBgm3();
     savedLetterScene.style.display = "none";
     choiceBox.style.display = "none";
     diaryScene.style.display = "none";
+    drawerScene.style.display = "none";
+    galleryModal.style.display = "none";
 
     hotspot1.style.display = "none";
     hotspot2.style.display = "none";
@@ -2094,57 +2105,67 @@ playBgm3();
 
     object1.style.display = "none";
     object2.style.display = "none";
-
     fireVideo.style.display = "none";
 
     fadeText.style.opacity = "0";
     endingPortrait.style.opacity = "0";
 
+    // エンディング背景は、暗転を外す前に必ず読み込む。
+    const finalBackground = "assets/bg/bg5.jpg";
     const delay = immediate ? 0 : 1500;
 
-    setTimeout(() => {
+    // immediate時も黒画面を維持して、白いフレームを出さない。
+    fadeScreen.style.background = "#000";
+    fadeScreen.style.opacity = "1";
+    fadeScreen.style.pointerEvents = "auto";
 
-        endingPortrait.style.display = "none";
-        fadeText.textContent = "";
+    await Promise.all([
+        preloadImage(finalBackground),
+        wait(delay)
+    ]);
 
-        fadeScreen.classList.remove("darkNoise");
+    endingPortrait.style.display = "none";
+    fadeText.textContent = "";
+    fadeScreen.classList.remove("darkNoise");
 
-        fadeScreen.style.opacity = "0";
-        fadeScreen.style.pointerEvents = "none";
+    // 暗転の裏側で背景と最終UIを準備する。
+    background.style.display = "block";
+    background.style.opacity = "1";
+    background.style.backgroundImage =
+        `url("${finalBackground}")`;
 
-        background.style.backgroundImage =
-            'url("assets/bg/bg5.jpg")';
+    finalScene.style.display = "flex";
+    finalScene.style.opacity = "0";
+    finalScene.style.pointerEvents = "auto";
 
-        background.style.opacity = "1";
+    if (shareButton) {
+        shareButton.style.display = "flex";
+        shareButton.style.pointerEvents = "auto";
+    }
 
-finalScene.style.display = "flex";
-finalScene.style.opacity = "0";
-finalScene.style.pointerEvents = "auto";
+    if (creditButton) {
+        creditButton.style.display = "flex";
+        creditButton.style.pointerEvents = "auto";
+    }
 
-if (creditButton) {
-    creditButton.style.display = "flex";
-    creditButton.style.pointerEvents = "auto";
-}
-
+    if (secretHotspot) {
         secretHotspot.style.display = "block";
+        secretHotspot.style.pointerEvents = "auto";
+    }
 
-        requestAnimationFrame(() => {
+    // background-imageの変更を最低2フレーム描画させてから暗転解除。
+    await nextPaint();
 
-            requestAnimationFrame(() => {
+    fadeScreen.style.opacity = "0";
+    fadeScreen.style.pointerEvents = "none";
 
-                finalScene.style.opacity = "1";
+    finalScene.style.opacity = "1";
 
-            });
-
-        });
-
-    }, delay);
-
-setTimeout(() => {
+    if (!immediate) {
+        await wait(1900);
+    }
 
     scene = "finalScene";
-
-}, immediate ? 0 : delay + 1900);
 
 }
 
