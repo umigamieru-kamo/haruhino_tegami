@@ -4,41 +4,69 @@
     box-sizing:border-box;
 }
 
-html,body{
-    width:100%;
-    height:100%;
-    overflow:hidden;
-    font-family:sans-serif;
+html,
+body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: sans-serif;
+}
+
+html {
+    background: #000;
 }
 
 body {
+    background: transparent;
     font-family: "Zen Old Mincho", serif;
 }
 
-#background{
-    position:fixed;
-    inset:0;
+#background,
+#endingBackground {
+    position: fixed;
+    inset: 0;
 
-    width:100vw;
-    height:100vh;
-    height:100dvh;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
 
-    background-color:#000;
-    background-image:url("assets/bg/bg1.jpg");
-    background-size:cover;
-    background-position:center;
-    background-repeat:no-repeat;
+    background-color: #000;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 
-    transform:translateZ(0);
-    backface-visibility:hidden;
-    will-change:transform;
+    pointer-events: none;
 
-    z-index:-1;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+
+    z-index: -1;
 }
 
-/* クリア済みの場合は、最初の描画からエンディング背景を使う。 */
-html.finished #background {
+#background {
+    background-image: url("assets/bg/bg1.jpg");
+    opacity: 1;
+}
+
+#endingBackground {
     background-image: url("assets/bg/bg5.jpg");
+
+    opacity: 0;
+
+    /*
+     * bg5は最初から読み込んでおき、
+     * エンディング時は透明度だけ変更する。
+     */
+    transition: opacity 0.8s ease;
+}
+
+/* クリア済みの場合は最初からbg5レイヤーを表示する */
+html.finished #endingBackground {
+    opacity: 1;
+}
+
+html.finished #background {
+    opacity: 0;
 }
 
 /* JSが最終画面を準備するまで黒幕を表示し、bg1の露出を防ぐ。 */
@@ -1874,10 +1902,9 @@ body {
 
 }
 
-body.loading {
-    visibility: hidden;
-}
-
+/* body全体をvisibility:hiddenにすると、スマホでhtmlの白背景が露出する。
+   初期画面は#bootCoverで覆うため、本文は隠さない。 */
+body.loading,
 body.ready {
     visibility: visible;
 }
@@ -2071,11 +2098,19 @@ body.ready {
 
 @media (max-width: 768px){
 
-    #background{
-        width:100vw;
-        height:100vh;
-        height:100dvh;
-        background-attachment:scroll;
+    #background,
+    #endingBackground {
+        width: 100vw;
+        height: 100vh;
+        height: 100dvh;
+
+        background-attachment: scroll;
+
+        /*
+         * モバイルでの背景レイヤー再生成を抑える
+         */
+        transform: translate3d(0, 0, 0);
+        backface-visibility: hidden;
     }
 
     #object1{
