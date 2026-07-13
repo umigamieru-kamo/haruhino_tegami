@@ -30,6 +30,8 @@ const nextMark = document.getElementById("nextMark");
 const fadeScreen = document.getElementById("fadeScreen");
 const fadeText = document.getElementById("fadeText");
 const background = document.getElementById("background");
+const endingBackground =
+    document.getElementById("endingBackground");
 const transitionImages =
     document.getElementById(
         "transitionImages"
@@ -1554,8 +1556,10 @@ transitionImageB.style.opacity = "0";
         "0";
 
     // 背景4へ変更
-    background.style.backgroundImage =
-        'url("assets/bg/bg4.jpg")';
+background.style.backgroundImage =
+    'url("assets/bg/bg4.jpg")';
+
+background.style.opacity = "1";
 
     // BGM再開
     // 念のためBGM1を停止
@@ -2153,11 +2157,15 @@ async function showFinalScene(immediate = false) {
     fadeText.textContent = "";
     fadeScreen.classList.remove("darkNoise");
 
-    // 暗転の裏側で背景と最終UIを完成状態にする。
-    background.style.display = "block";
-    background.style.opacity = "1";
-    background.style.backgroundImage =
-        `url("${finalBackground}")`;
+/*
+ * bg5は別レイヤーに最初から設定されているため、
+ * background-imageを書き換えない。
+ */
+background.style.display = "block";
+background.style.opacity = "1";
+
+endingBackground.style.display = "block";
+endingBackground.style.opacity = "1";
 
     // finalScene自身はフェードさせない。暗転レイヤーだけを1回フェードする。
     finalScene.style.transition = "none";
@@ -2239,43 +2247,130 @@ diaryBackButton.addEventListener(
 // ページ読み込み時の初期表示
 // =========================
 
-window.addEventListener(
-    "load",
-    () => {
+function hideBootCover() {
 
-        const finished =
+    const bootCover =
+        document.getElementById("bootCover");
+
+    if (!bootCover) {
+        return;
+    }
+
+    bootCover.style.opacity = "0";
+    bootCover.style.pointerEvents = "none";
+
+    setTimeout(() => {
+
+        bootCover.style.display = "none";
+
+    }, 500);
+
+}
+
+async function initializePage() {
+
+    let finished = false;
+
+    try {
+
+        finished =
             localStorage.getItem(
                 "mataneFinished"
-            );
+            ) === "true";
 
-        if (finished === "true") {
+    } catch (error) {
 
-            // 最初のタイトル画面を隠す
-            ui.style.display = "none";
-
-            // エンディング画面へ直接移動
-            showFinalScene(true);
-
-        } else {
-
-            // 初回はタイトル画面を表示
-            ui.style.display = "flex";
-
-        }
-
-        document.body.classList.remove(
-            "loading"
+        console.warn(
+            "クリア状態を確認できませんでした。",
+            error
         );
-
-        document.body.classList.add(
-            "ready"
-        );
-
-        // 初期描画用のクリア済みクラスは、最終画面の準備後も残して問題ない。
-        // 背景をCSS側でもbg5に固定し、再描画時のbg1露出を防ぐ。
 
     }
-);
+
+    document.body.classList.remove("loading");
+    document.body.classList.add("ready");
+
+    // 初回プレイでは起動カバーを使わず、最初からbg1を表示する。
+if (!finished) {
+
+    document.documentElement.classList.remove("finished");
+
+    const bootCover =
+        document.getElementById("bootCover");
+
+    if (bootCover) {
+        bootCover.style.display = "none";
+        bootCover.style.pointerEvents = "none";
+    }
+
+    /*
+     * 初回はbg1を表示し、bg5レイヤーは透明にする。
+     */
+    background.style.display = "block";
+    background.style.opacity = "1";
+
+    endingBackground.style.display = "block";
+    endingBackground.style.opacity = "0";
+
+    ui.style.display = "flex";
+
+    return;
+}
+
+    // クリア済みの場合だけ、黒幕の裏で最終画面を準備する。
+    ui.style.display = "none";
+
+    // 画像エラーやモバイル固有の停止が起きても黒幕を残し続けない。
+    const safetyTimer = setTimeout(() => {
+        hideBootCover();
+    }, 5000);
+
+    try {
+
+        await showFinalScene(true);
+        await nextPaint();
+
+    } catch (error) {
+
+        console.error(
+            "最終画面の初期化に失敗しました。",
+            error
+        );
+
+        // 最低限、背景とUIを表示する。
+background.style.display = "block";
+background.style.opacity = "1";
+
+endingBackground.style.display = "block";
+endingBackground.style.opacity = "1";
+
+finalScene.style.display = "flex";
+        finalScene.style.opacity = "1";
+        finalScene.style.pointerEvents = "auto";
+
+    } finally {
+
+        clearTimeout(safetyTimer);
+        hideBootCover();
+
+    }
+
+}
+
+// window.loadは動画・音声の読み込み待ちで遅れることがあるため使わない。
+if (document.readyState === "loading") {
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        initializePage,
+        { once: true }
+    );
+
+} else {
+
+    initializePage();
+
+}
 // =========================
 // 春陽の引き出し
 // =========================
